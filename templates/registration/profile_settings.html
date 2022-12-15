@@ -1,0 +1,315 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+
+{% block title %}{{site.slogan}}'s Profile Setting{% endblock %}
+
+{% block content %}
+
+
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+  
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">{{site.slogan}}'s Profile Setting</h1>
+  
+  
+                
+            </div>
+        </div>
+    </div>
+  </section>
+  
+
+
+
+<section class="bg-primary d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-5 bg-secondary">
+
+                    <div class="px-4 text-center  ">
+
+
+
+
+
+
+
+
+
+
+
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link active" id="pills-avatar-tab" data-bs-toggle="pill" data-bs-target="#pills-avatar" type="button" role="tab" aria-controls="pills-avatar" aria-selected="true">Avatar</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="pills-account_info-tab" data-bs-toggle="pill" data-bs-target="#pills-account_info" type="button" role="tab" aria-controls="pills-account_info" aria-selected="false">Account Setting</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="pills-profile_info-tab" data-bs-toggle="pill" data-bs-target="#pills-profile_info" type="button" role="tab" aria-controls="pills-profile_info" aria-selected="false">Profile Setting</button>
+                            </li>
+                            {% if user.is_contractor %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-skill_setting-tab" data-bs-toggle="pill" data-bs-target="#pills-skill_setting" type="button" role="tab" aria-controls="pills-skill_setting" aria-selected="false">Skill Setting</button>
+                              </li>
+
+                              <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-payout_settings-tab" data-bs-toggle="pill" data-bs-target="#pills-payout_settings" type="button" role="tab" aria-controls="pills-payout_settings" aria-selected="false">Payout Setting</button>
+                              </li>
+                              {% endif %}
+                          
+                          </ul>
+                          <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-avatar" role="tabpanel" aria-labelledby="pills-avatar-tab" tabindex="0">
+                                <div  hx-target="this" hx-swap="innerHTML">
+
+                                    {% if user.profile.avatar %}
+                                    <img class="d-block mx-auto mb-4 rounded-circle" src="{{ user.profile.avatar.url }}" alt="{{user.get_full_name}}" width="{{user.profile.avatar.width}}">
+                                    <div hx-get="{% url 'accounts:delete_avatar' %}"><i class="bi bi-x-square"></i></div>
+                                    {% else %}
+                                    <form method="post" id="avatar_form" action="" enctype="multipart/form-data" >
+                                        {% csrf_token %}
+                                        <div class="col-md-6 p-2 d-block mx-auto mb-4">
+                                            <div class="form-floating">
+                                                {{ avatar_form.avatar }}
+                                                <label class="mb-2 text-muted" for="{{ avatar_form.avatar.id_for_label }}">{{ avatar_form.avatar.label }}</label>
+                                            </div>
+                                            <span class="text-error invalid-feedback">{{ avatar_form.avatar.errors  }}</span>
+                                        </div>   
+                                        <input class="btn btn-primary" name="avatar_form" type="submit"  value="Upload">           
+                                    </form>                       
+                                    {% endif %}
+            
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-account_info" role="tabpanel" aria-labelledby="pills-account_info-tab" tabindex="1">
+                                                    
+                    <div class="border-bottom mb-5">
+                        <h2 class="pb-2 border-bottom border-3 border-primary text-danger">Account Information</h2>
+                        <div class="row g-4 py-3 row-cols-1">
+                            <div class="col-12">
+                                <form method="post" id="user_form" action="" novalidate="" autocomplete="off" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.username }}
+                                                    <label class="mb-2 text-muted"  for="{{ user_form.username.id_for_label }}">{{ user_form.username.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.username.errors }}</span>
+                                            </div>
+                    
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.first_name }}
+                                                    <label class="mb-2 text-muted"
+                                                        for="{{ user_form.first_name.id_for_label }}">{{ user_form.first_name.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.first_name.errors  }}</span>
+                                            </div>
+                    
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.last_name }}
+                                                    <label class="mb-2 text-muted"
+                                                        for="{{ user_form.last_name.id_for_label }}">{{  user_form.last_name.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.last_name.errors  }}</span>
+                                            </div>
+                    
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.email }}
+                                                    <label class="mb-2 text-muted" for="{{ user_form.email.id_for_label }}">{{ user_form.email.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.email.errors }}</span>
+                                            </div>
+
+
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.mobile }}
+                                                    <label class="mb-2 text-muted" for="{{ user_form.mobile.id_for_label }}">{{ user_form.mobile.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.mobile.errors }}</span>
+                                            </div>
+                    
+                    
+                    
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.phone }}
+                                                    <label class="mb-2 text-muted" for="{{ user_form.phone.id_for_label }}">{{ user_form.phone.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.phone.errors }}</span>
+                                            </div>
+                    
+                                            <div class="col-md-6 p-2">
+                                                <div class="form-floating">
+                                                    {{ user_form.orgonization }}
+                                                    <label class="mb-2 text-muted"
+                                                        for="{{ user_form.orgonization.id_for_label }}">{{ user_form.orgonization.label }}</label>
+                                                </div>
+                                                <span class="text-error invalid-feedback">{{ user_form.orgonization.errors  }}</span>
+                                            </div>
+                    
+                                            <div class="col-12 p-2">
+                                                <input class="btn btn-primary w-100 py-3" name="user_form" type="submit"  value="Update">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                            </div>
+                            <div class="tab-pane fade" id="pills-profile_info" role="tabpanel" aria-labelledby="pills-profile_info-tab" tabindex="2">
+                                <div class="border-bottom mb-5">
+                                    <h2 class="pb-2 border-bottom border-3 border-primary text-danger">Profile Information</h2>
+                                    <div class="row g-4 py-3 row-cols-1">
+                                        <div class="col-12">
+                                            <form method="post" id="profile_form" action="" novalidate="" autocomplete="off" enctype="multipart/form-data">
+                                                <div class="row g-3">
+                                                    {% csrf_token %}                    
+                                                    <div class="row">
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ profile_form.about_me }}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ profile_form.about_me.id_for_label }}">{{ profile_form.about_me.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ profile_form.about_me.errors }}</span>
+                                                        </div>
+                                
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ profile_form.my_location }}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ profile_form.my_location.id_for_label }}">{{ profile_form.my_location.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ profile_form.my_location.errors  }}</span>
+                                                        </div>
+                                
+                                                      
+                                
+                                                        <div class="col-12 p-2">
+                                                            <input class="btn btn-primary w-100 py-3" name="profile_form"
+                                                                form="profile_form" type="submit" value="Update">
+                                                        </div>
+                                                    </div>
+                                                </div>                        
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if user.is_contractor %}
+                            <div class="tab-pane fade" id="pills-skill_setting" role="tabpanel" aria-labelledby="pills-skill_setting-tab" tabindex="3">
+                                <div class="border-bottom mb-5">
+                                    <h2 class="pb-2 border-bottom border-3 border-primary text-danger">Skills Settings</h2>
+                                    <div class="row g-4 py-3 row-cols-1">
+                                        <div class="col-12">
+                                            <form method="post" id="contractor_form" action="" novalidate="" autocomplete="off">
+                                                <div class="row g-3">
+                                                    {% csrf_token %}                    
+                                                    <div class="row">
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ contractor_form.skills_in}}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ contractor_form.skills_in.id_for_label }}">{{ contractor_form.skills_in.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ contractor_form.skills_in.errors }}</span>
+                                                            
+                                                        </div>
+
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ contractor_form.cv_link }}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ contractor_form.cv_link.id_for_label }}">{{ contractor_form.cv_link.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ contractor_form.cv_link.errors  }}</span>
+                                                        </div>
+                                
+                                                        <div class="col-12 p-2">
+                                                            <input class="btn btn-primary w-100 py-3" name="contractor_form"
+                                                                form="contractor_form" type="submit" value="Update">
+                                                        </div>
+                                                    </div>
+                                                </div>                        
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-payout_settings" role="tabpanel" aria-labelledby="pills-payout_settings-tab" tabindex="4">
+                                <div class="border-bottom mb-5">
+                                    <h2 class="pb-2 border-bottom border-3 border-primary text-danger">Payout Settings</h2>
+                                    <div class="row g-4 py-3 row-cols-1">
+                                        <div class="col-12">
+                                            <form method="post" id="user_payout_form" action="" novalidate="" autocomplete="off">
+                                                <div class="row g-3">
+                                                    {% csrf_token %}                    
+                                                    <div class="row">
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ user_payout_form.payout_method}}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ user_payout_form.payout_method.id_for_label }}">{{ user_payout_form.payout_method.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ user_payout_form.payout_method.errors }}</span>
+                                                        </div>
+            
+                                                        <div class="col-md-12 p-2">
+                                                            <div class="form-floating">
+                                                                {{ user_payout_form.payout_account}}
+                                                                <label class="mb-2 text-muted"
+                                                                    for="{{ user_payout_form.payout_account.id_for_label }}">{{ user_payout_form.payout_account.label }}</label>
+                                                            </div>
+                                                            <span class="text-error invalid-feedback">{{ user_payout_form.payout_account.errors }}</span>
+                                                        </div>
+                                
+                                                        <div class="col-12 p-2">
+                                                            <input class="btn btn-primary w-100 py-3" name="user_payout_form"
+                                                                form="user_payout_form" type="submit" value="Update">
+                                                        </div>
+                                                    </div>
+                                                </div>                        
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        
+                          </div>
+                
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

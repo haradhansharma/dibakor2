@@ -1,0 +1,184 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+  <div class="container px-0 mt-5">
+      <div class="row d-flex justify-content-center align-items-cnenter text-center">
+          <div class="col-12">
+             
+
+                  <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">Invoice #{{invoice.id}} for order #{{invoice.order.id}}</h1>
+
+
+              
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+<section class="bg-primary d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <div data-aos="fade-up" data-aos-delay="100" class="card shadow bg-secondary border-0">
+
+                    <div class="card-header bg-primary">
+                        <div class="align-items-center d-flex justify-content-between">
+                            <div class="text-secondary">
+                                Thank you for the business with us!
+                            </div>
+                            <div>
+                                <a href="{% url 'bds:invoicepdf' invoice.id %}" target="_blank" class="btn btn-primary">Download PDF</a>
+                            </div>
+
+                        </div>
+                        
+                      </div>
+
+                    
+                        <div class="card-body">
+                          <div class="container mb-5 mt-3">
+                            <div class="row d-flex align-items-baseline">
+                              <div class="col fs-2 border-bottom border-1 border-danger">
+                                <span><strong>Invoice:</strong></span><span> #{{invoice.id}}</span>
+                              </div>
+                              <div>
+                                <div><span><Strong>Order:</Strong></span> <span class="text-primary text-capitalize"> #{{invoice.order.id}}</span></div>
+
+                                <div><span><Strong>Status:</Strong></span> <span class="text-primary text-capitalize">{{invoice.order_status}}</span></div>
+                                <div><span><Strong>Payment method:</Strong></span> <span class="text-capitalize">{{invoice.payment_method_title}}</span></div>
+                                <div><span><Strong>Payment method Instruction:</Strong></span> <span class="text-capitalize">{{invoice.payment_method_isntruction}}</span></div>
+                                <div><span><Strong>Created at:</Strong></span> <span class="text-capitalize">{{invoice.created_at}}</span></div>
+                                <div><span><Strong>Tentative Delivery Date:</Strong></span> <span class="text-capitalize">{{invoice.tentative_delivery}}</span></div>
+
+                                
+
+                            </div>
+                            </div>
+
+                            <div class="row d-flex align-items-baseline mt-5">
+                                <div class="col fs-5 border-bottom border-1 border-danger">
+                                  <span><strong>From:</strong></span>
+                                </div>
+                                <div>
+                                    <div class="text-uppercase">{{invoice.from_name}}</div>
+                                    <div>{{invoice.from_email}}</div>
+                                    <div>{{invoice.from_phone}}</div>
+                                    <div>{{invoice.from_location}}</div>
+                                </div>
+                              </div>
+
+                              <div class="row d-flex align-items-baseline mt-5">
+                                <div class="col fs-5 border-bottom border-1 border-danger">
+                                  <span><strong>To(Payment Address):</strong></span>
+                                </div>
+                                <div>
+                                    <div class="text-uppercase">{{invoice.to_name}}</div>
+                                    <div>{{invoice.to_email}}</div>
+                                    <div>{{invoice.to_phone}}</div>
+                                    <div>{{invoice.payment_address}}</div>
+                                   
+
+                                </div>
+                              </div>
+
+
+                              <div class="row d-flex align-items-baseline mt-5">
+                                <div class="col fs-5 border-bottom border-1 border-danger">
+                                  <span><strong>Order made for:</strong></span>
+                                </div>
+
+                              <table class="table caption-top table-responsive">
+                                
+                                <thead>
+                                  <tr>                                    
+                                    <th scope="col">Picture</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Service Option</th>
+                                    <th scope="col">Order Total</th>
+                                    <th scope="col">Paid Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr  class="align-middle">                                    
+                                    <td><img src="{{ invoice.service_image }}"  alt="" width="150px" ></td>
+                                    <td>
+                                        <div>{{invoice.service_title}}</div>
+                                        <div>{{invoice.service_description}}</div>
+                                    </td>
+                                    <td>
+                                        <div class="text-uppercase">{{invoice.service_option_title}}</div>
+                                        <div>{{invoice.service_option_description}}</div>
+                                    </td>
+                                    <td><div>{{invoice.order_amount}}</div></td>
+                                    <td><div>{% if invoice.paid_amount > 0 %}{{invoice.paid_amount}}{% else %} <span class="text-danger">Payment Checking</span> {% endif %}</div></td>                                  
+
+                                  </tr>
+                                  
+                                </tbody>
+                              </table>
+                              <div class="card-footer text-end ">
+                               <div class="h2 text-danger">Due: {% if invoice.paid_amount > 0 and not invoice.has_pending_trans %}{{invoice.total_due}} {% else %} <span class="text-danger">Payment Checking</span> {% endif %} </div> 
+                               <div class="small text-dark">Due payent must be paid by: {% if invoice.paid_amount > 0 %}{{invoice.due_payment_by}} {% else %} <span class="text-danger">Payment Checking</span> {% endif %} </div> 
+
+                              </div>
+                              </div>
+
+                              <div class="row d-flex align-items-baseline mt-5">
+                                <div class="col fs-5 border-bottom border-1 border-danger mb-5">
+                                  <span><strong>Extra Information Provided to consider:</strong></span>
+                                </div>
+                                <div class="px-5">
+                                   {% for key, value in invoice.order_require.items %}
+                                    <div class="border-bottom border-primary  border-1 fs-5 text-mute">{{key}}</div>
+                                    <div class="text-end pe-5">{{value}}</div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="px-5">
+                                    {% for key, value in invoice.order_require_file.items %}
+                                     <div class="border-bottom border-primary border-1 fs-5 text-mute">{{key}}</div>
+                                     <div class="text-end pe-5"><img src="{{ value }}" alt="" width="150px"></div>
+                                     
+                                     {% endfor %}
+                                 </div>
+                              </div>
+
+                              
+
+                              
+
+
+
+
+                          </div>
+                        </div>
+
+                        <div class="card-footer bg-primary">
+                            <div class="align-items-center d-flex justify-content-between">
+                                <div class="text-secondary">
+                                    Thank you for the business with us!
+                                </div>
+                                <div>
+                                    <a href="{% url 'bds:invoicepdf' invoice.id %}" target="_blank" class="btn btn-primary">Download PDF</a>
+                                </div>
+
+                            </div>
+                            
+                          </div>
+                      
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock content %}  

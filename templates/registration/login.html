@@ -1,0 +1,72 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% block title %}{{site.slogan}}{% endblock %}
+ 
+{% block content %}
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" >
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">Login</h1>
+
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-primary d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div data-aos="fade-up" data-aos-delay="100" class="card bg-secondary p-5">
+                    <form action="" method="POST"  novalidate="" autocomplete="off" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="container px-0">
+
+                     
+            
+                        <div class="form-floating mb-3">
+                            {{ form.username }}
+                            <label class="text-primary" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                            <span class="text-start text-danger">{{ form.username.errors }}</span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            {{ form.password }}
+                            <label class="text-primary" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                            <span class="text-start text-danger">{{ form.password.errors }}</span>
+                            <a href="{% url 'password_reset' %}" class="float-end">Forget Password?</a>
+                        </div>
+                       
+                        <div class="form-floating mb-3">                
+                            {{ form.captcha }}                
+                            <span class="text-start text-danger">{{ form.captcha.errors }}</span>
+                        </div>
+                        
+                      
+                            
+                            <button type="submit" class="btn btn-primary"> Login </button>
+                             
+                        <hr class="my-4 text-primary">
+                        
+                        <div class="text-muted"> Don't have an account? <a href="{% url 'accounts:signup' %}" class="text-dark">Create One</a> </div>
+                   
+                    </div>
+
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock content %}

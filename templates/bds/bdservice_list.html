@@ -1,0 +1,184 @@
+{% extends "bds/layouts/base.html" %}
+{% block content %}
+
+{% load custom_tags %}
+
+<section class="bg-primary placeholder-wave-non-ani d-flex align-items-center" style="min-height: 100vh;">
+    <div class="container px-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                <div class="my-5 text-center text-xl-start">
+                    <h1 data-aos="fade-up" class="display-5 fw-bolder text-secondary mb-2">A Digital Marketing Agency Based On Dhaka, Bangladesh.</h1>      
+                
+                    <p data-aos="fade-up" data-aos-delay="200" class="lead fw-normal text-white-50 mb-4">Facebook, google, Youtube, Linkedin, Twitter. Page creation, Maintain, Advertisement!</p>
+                    <div data-aos="fade-up" data-aos-delay="250" class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
+                        <a class="btn btn-outline-light btn-lg px-4" href="#!">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300" class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="{{ '/media/front-img.png' }}" alt="..."></div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-primary progress-bar-striped-custom d-flex align-items-center" style="min-height: 75vh;">
+
+    <div class="container px-5">
+
+        <div data-aos="fade-up" data-aos-delay="100" class="section-header">
+            <h2 class="display-5 fw-bold text-secondary text-uppercase">Why Choose Us</h2>
+  
+          </div>
+        
+          <div data-aos="fade-up" data-aos-delay="200" class="card border-0 bg-secondary overflow-hidden">
+            <div class="card-body p-0">
+                <div class="row gx-0 align-items-center">
+                    <div class="col-lg-6 justify-content-center align-items-center">
+                        <div id="myCarousel" class="carousel slide mb-0" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+                              <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class="active" aria-current="true"></button>
+                            </div>
+                            <div class="carousel-inner">
+                              <div class="carousel-item ">
+                                <img src="{{'/media/mobile.png'}}" class="img-fluid" alt="">
+                                <div class="container">
+                                  <div class="carousel-caption text-start text-primary">
+                                    <h1>Example headline.</h1>
+                                    <p>Some representative placeholder content for the first slide of the carousel.</p>
+                                    <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                               
+                                <img src="{{'/media/mobile2.png'}}" class="img-fluid" alt="">
+
+                        
+                                <div class="container">
+                                  <div class="carousel-caption text-primary">
+                                    <h1>Another example headline.</h1>
+                                    <p>Some representative placeholder content for the second slide of the carousel.</p>
+                                    <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="carousel-item active">
+                               
+
+                                <img src="{{'/media/mobile3.png'}}" class="img-fluid" alt="">
+                                
+                                <div class="container">
+                                  <div class="carousel-caption text-primary text-end">
+                                    <h1>One more for good measure.</h1>
+                                    <p>Some representative placeholder content for the third slide of this carousel.</p>
+                                    <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                    </div>
+                    <div class="col-lg-6 justify-content-center align-items-center">
+                      <img class="img-fluid rounded-0 my-0 w-100" src="{{ '/media/we_are_experts.png' }}" alt="We are Experts">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<section class="bg-secondary d-flex align-items-center" style="min-height: 75vh;">
+    <div class="container px-5 my-5">
+        <div class="text-center mb-5">
+            <div data-aos="fade-up" data-aos-delay="100" class="section-header">
+                
+              <h2 class="display-5 fw-bold text-primary text-uppercase">Our Service</h2>
+
+              </div>
+
+        </div>
+        <div class="row gx-5 justify-content-center">
+            {% for object in object_list %}
+            <div data-aos="fade-up" data-aos-delay="{{ forloop.counter | multiply:100 }}" class="col-lg-6 col-xl-4 mb-5 d-flex">
+                <div class="card bg-primary border-1 rounded-2 mb-5 mb-xl-0 flex-fill overflow-hidden progress-bar-striped-forward ">
+                    <div class="mb-1">
+                      <img src="{{ object.primary_image }}" class="img-fluid fade opacity-75" alt="{{object.title}}">
+                    </div>
+                    <div class="p-3">
+                        <div class="small text-uppercase fw-bold text-secondary">{{object.title}} </div>
+                    </div>
+                    <div class="p-3 pt-0">
+                        <div class="small text-light text-opacity-50">{{object.description | truncatechars:150 }} </div>
+                    </div>
+                    <div class="card-body p-5 pt-0 pe-2">             
+                        
+                        <ul class="list-unstyled mb-4">
+                            {% for option in object.serviceoptions_set.all %}
+                            <li class="mb-2 text-secondary">
+                                <i class="bi bi-check"></i>
+                                <small>{{option.title}} {% if option.apndix != 0 %} {{option.apndix }}{% endif %} -- {{option.value}}</small>
+                            </li>                            
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-body p-5 pt-0">
+                        <div class="d-grid"><a class="btn btn-secondary" href="{{object.get_absolute_url}}">Buy Service</a></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-primary progress-bar-striped-forward d-flex align-items-center justify-content-center text-center" style="min-height: 75vh;">
+  <div class="container px-5 my-5">
+      <div class="text-center mb-5">
+          <div data-aos="fade-up" data-aos-delay="100" class="section-header2">
+                
+              <h2 class="display-5 fw-bold text-secondary text-uppercase">Working Behind</h2>
+
+            </div>
+          <p data-aos="fade-up" data-aos-delay="150" class="lead fw-normal text-light text-opacity-50 mb-0 aos-init aos-animate">Dedicated Experts That Working Behind The Scene</p>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <img src="{{ '/media/haradhan.png' }}" class="rounded-circle" width="200" height="200" alt="Haradhan Sharma">
+  
+          <h2 class="fw-normal">Haradhan Sharma</h2>
+          <p>Something About Haradhan SHarma</p>
+          <a class="btn btn-secondary" target="_blank" href="https://hrdnsh.com">View details »</a>
+        </div><!-- /.col-lg-4 -->
+        
+        <div class="col-lg-6">
+          <img src="{{ '/media/suzan.jpg' }}" class="rounded-circle" width="200" height="200" alt="Haradhan Sharma">
+
+  
+          <h2 class="fw-normal">Suzan Sharma</h2>
+          <p>Something ABout Suzan Sharma</p>
+          <a class="btn btn-secondary" target="_blank" href="https://www.linkedin.com/in/suzan-sharma-303832178/">View details »</a>
+        </div><!-- /.col-lg-4 -->
+      </div>
+  </div>
+</section>
+
+
+
+
+
+
+{% endblock content %}

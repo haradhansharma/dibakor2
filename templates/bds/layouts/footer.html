@@ -1,0 +1,23 @@
+  
+
+<footer class="footer mt-auto py-3 bg-secondary">
+    <div class="container">
+        <div class="row text-center align-items-center justify-content-center mb-4">
+            <div>
+                <a href="{% url 'accounts:contractor_signup' %}">Contractor Signup</a>
+            </div>
+           
+            <p>&copy; All Right Reserved By <a href="https://selfurl.xyz/" class="text-primary">{{site.domain}}</a>,
+                Developed by <a href="https://hrdnsh.com" rel="noreferrer" class="text-warning">Haradhan Sharma</a>.</p>
+        </div>
+
+        
+
+    </div>
+</footer>
+<script nonce="{{ CSP_NONCE }}" type="application/javascript">
+    document.body.addEventListener('htmx:configRequest', (e) => {
+        e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+</script>
+

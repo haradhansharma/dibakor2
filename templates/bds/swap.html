@@ -1,0 +1,22 @@
+{% load static %}
+{% load custom_tags %}
+{% for item in order.orderitemsfile.all %}
+<div data-aos="fade-up" data-aos-delay="{{ forloop.counter | multiply:100 }}" class="col-md-6  mb-3 d-flex">                                    
+    <div class="card border-0 bg-light mb-2 mb-xl-0 flex-fill p-2 align-items-center justify-content-center">
+    {{item.require_title}}
+    
+    <!--DO NOT CHANGE name DATA FORMATE BELOW! IT WILL IMPACT IN THE VIEW FALSE RESULT-->
+    
+    {% if item.required_option.type == 'file' %}
+    {% if item.title_value != '' %}
+    <img src="{% static item.title_value.url %}" alt="" width="200px">
+    
+    <div hx-get="{% url 'bds:delete_extra_file' item.id item.order.id %}"><i class="bi bi-x-square"></i></div>
+    {% else %}
+    <input type="file" name="require-{{item.id}}" class="form-control" id="{{item.id}}"
+        accept="image/png, image/jpeg" enctype="multipart/form-data" {% if item.required_option.required %} required {% endif %}>
+    {% endif %} 
+    {% endif %} 
+</div>
+</div>                                
+{% endfor %}

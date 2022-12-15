@@ -1,0 +1,157 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">Pay Due of order #{{order.id}}</h1>
+                   
+
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-primary d-flex align-items-center" >
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <div data-aos="fade-up" data-aos-delay="100" class="card bg-secondary">
+
+                 
+
+                    <form class="p-5" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12 border-bottom border-danger">
+                                <p class="text-danger display-4 text-end"><strong>Due</strong>: {{order.due}}</p>
+                                <p class="text-danger display-4 text-end"><strong>Over Due Penalty</strong>: {{order.over_due_penalty}}</p>
+                            </div>
+                            <div class="col-12 border-bottom border-danger border-2">
+                                <p class="text-danger display-4 text-end"><strong>Total Due</strong>: {{order.total_due}}</p>
+                            </div>
+                            </div>
+                            <div class="row mt-5">
+                            
+                            <div class="col-md-6 d-flex">
+                                <div class="flex-fill bg-light card border-0  p-5 pt-2">
+                                <h4 class="border-bottom border-1 border-danger">Select Payment Methods</h4>
+                                <div class="">
+                                    <h5 class="text-muted">Payment Instructions</h5>
+                                    <span id="instruction" class="">
+                                        <div id="feedbackspinner">        
+                                            <div hx-get="{% url 'bds:payment_instruction' %}" hx-include="[name='pm']" hx-trigger="load"></div>                                   
+                                        </div>
+                                    </span>
+                                
+                                    <label >Select Methods</label>
+                                    <select class="form-select" aria-label="Payment Methods" name="pm" hx-get="{% url 'bds:payment_instruction' %}" hx-include="[name='pm']" hx-target="#feedbackspinner" >
+                                        {% for method in payment_methods%}
+                                        <option value="{{method.id}}">{{method.title}}</option>                                    
+                                        {% endfor %}
+                                    </select>                                    
+                                </div> 
+                            </div>
+                            </div>
+                            
+
+                            <div class="col-md-6 d-flex">  
+                                <div class="flex-fill bg-light card border-0 p-5 pt-2">
+                                  
+                                <h4 class="border-bottom border-1 border-danger">Confirm Due Payment</h4>
+                                <div class="">
+                                    <input type="hidden" name="order_id" value="{{order.id}}">                              
+
+                                {{confirm_dataForm.as_p}}
+                                <div id="amount_error"></div>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                </div>
+                               
+                            </div>
+                            </div>
+                            </div>
+
+                            <div class="row mt-5">
+                                <div class="col-md-6 d-flex">
+                                    <div class="flex-fill card bg-light border-0 p-5 pt-2">
+                                    <h4 class="border-bottom border-1 border-danger">Order Sumamry</h4>
+                                    <div class="card border-0 bg-light p-5 pt-0">
+                                        <div><strong>Odrer Number:</strong><span> #{{order.id}}</span></div>
+                                        <div><strong>Service Executable:</strong><span> {{order.service.title}}</span></div>
+                                        <div><strong>Option Choosen:</strong><span> {{order.service_option.title}}{% if order.service_option.apndix != 0 %}{{order.service_option.apndix }}{% endif %}</span></div>
+                                        <div><strong>Option Price:</strong><span> {{order.order_amount}}</span></div>
+                                        <div><strong>Paid Amount:</strong><span> {{order.paid_amount}}</span></div>
+                                        <div><strong>Order Status:</strong><span> {{order.last_status}}</span></div>
+                                        <div><strong>Tentative Delivery Date:</strong><span> {{order.tentative_delivery_date}}</span></div>                                
+                                        
+                                        <div><strong>Partial payment allowed :</strong><span> {{order.service_option.partial_allowed}}</span></div>
+                                        <div><strong>Initial paid shold be greater then :</strong><span> {{should_paid}}</span></div>
+                                        <div><strong>Overdue Penalty:</strong><span> {{order.over_due_penalty}}</span></div>    
+                                        <div><strong>Full Payment By:</strong><span> {{order.full_payment_date}}</span></div>
+                                        
+    
+                                    </div>   
+                                </div>                                
+                                </div>  
+
+                                <div class="col-md-6 d-flex ">
+                                    <div class="flex-fill card bg-light border-0 p-5 pt-2">
+                                        <h4 class="border-bottom border-1 border-danger">Your Information</h4>
+                                <div class="card border-0 bg-light p-5 pt-2">
+                                    <p class="text-uppercase">{{ order.user.get_full_name }}</p>
+                                    <p>{{ order.user.email }}</p>
+                                    <p>{{ order.user.mobile }}</p>
+                                </div>
+
+                                
+                                
+
+                                <h4 class="border-bottom border-1 border-danger">Billing Address</h4>
+                              
+                                        {{ order.payment_address }}
+                                
+                                </div>  
+                                     
+                                </div>                                
+                                </div> 
+
+
+
+                            </div>
+
+
+
+                           
+                        </div>   
+
+
+
+
+
+                           
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+{% endblock content %}  

@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+
+
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="msvalidate.01" content="C960B076480CA5EDEB68F2B60FA3A8B6" />
+    <meta name="google-site-verification" content="MGTtBLWPpiQbR7H6gZEfcLmjDP0bsmFP3Aa7U8iRmjE" />
+    <meta name="facebook-domain-verification" content="msn2jr9554t197xn4dw93k9p2v46qh" />
+    <meta name="propeller" content="70a6f1647519f6eebf337a10389233e4">
+    <meta name="ahrefs-site-verification" content="65fb77a34efdf9d9daa566a15ed50ebad3f212b2866a6681205e40800a086477">
+
+    {% include "layouts/googlescripts.html" %}
+    <title>
+        {{site.name}} - {% block title %}{% endblock %}
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="{{site.name}} - {{site.slogan}}">
+    <meta name="keywords" content="{{site.tag}}" />
+    <meta name="author" content="{{site.domain}}">
+    <meta name="description" content="{{site.description}}">
+    <link rel="canonical" href="{{site.canonical}}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{site.canonical}}">
+    <meta property="og:title" content="{{site.name}} - {{site.slogan}}">
+    <meta property="og:description" content="{{site.description}}">
+    <meta property="og:image" content="{% static site.og_image %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{site.canonical}}">
+    <meta property="twitter:title" content="{{site.name}} - {{site.slogan}}">
+    <meta property="twitter:description" content="{{site.description}}">
+    <meta property="twitter:image" content="{% static site.og_image %}">
+
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="{% static site.favicon %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static site.favicon %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static site.favicon %}">
+    <link rel="manifest" href="{% url 'doc:webmanifest' %}">
+    <link rel="mask-icon" href="{% static site.mask_icon %}" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+
+
+    <link type="text/css" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/bds.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+
+    <script src="{% static 'vendor/htmx/htmx.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+
+
+
+    {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    {% include "bds/layouts/header.html" %}
+
+    <main class="flex-shrink-0">
+        <div class="container-fluid">
+            <div class="row">
+                {% if messages %}
+                <div class="col-12 text-center">
+                    <div class="alert alert-secondary shadow-soft" role="alert">
+                        {% for message in messages %}
+                        <span class="alert-inner--text">{{ message }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+    </main>
+
+    {% include "bds/layouts/footer.html" %}
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>   
+
+    <script src="{% static 'js/bds.js' %}"></script>
+    {% block javascripts %}{% endblock javascripts %}
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+</body>
+
+</html>

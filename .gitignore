@@ -1,0 +1,17 @@
+*.pyc  
+*~  
+__pycache__  
+dienv
+.vscode
+brand_pictures
+theme
+.DS_Store  
+db.sqlite3
+server_pass.txt
+dibakor/settings.py
+static/assets/scss
+static/assets/gulpfile.js
+static/assets/package.json
+static/CACHE
+logs
+staticfiles

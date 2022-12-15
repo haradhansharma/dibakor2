@@ -1,0 +1,187 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block title %}{{site.slogan}}'s Profile Setting{% endblock %}
+
+{% block content %}
+
+
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+  
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">{{site.slogan}}'s Profile Setting</h1>
+  
+  
+                
+            </div>
+        </div>
+    </div>
+  </section>
+  
+
+
+
+<section class="bg-primary d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <div class="card bg-light p-5">
+
+                  
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link active" id="pills-progressing_orders-tab" data-bs-toggle="pill" data-bs-target="#pills-progressing_orders" type="button" role="tab" aria-controls="pills-progressing_orders" aria-selected="true">Progressing Orders</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link" id="pills-picked_orders-tab" data-bs-toggle="pill" data-bs-target="#pills-picked_orders" type="button" role="tab" aria-controls="pills-picked_orders" aria-selected="true">Picked Orders</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link" id="pills-waiting_to_pick-tab" data-bs-toggle="pill" data-bs-target="#pills-waiting_to_pick" type="button" role="tab" aria-controls="pills-waiting_to_pick" aria-selected="true">Waiting to approve</button>
+                        </li>
+                      </ul>
+                      <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-progressing_orders" role="tabpanel" aria-labelledby="pills-progressing_orders-tab">
+                            <table class="table table-striped table-hover table-responsive">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Service Option</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Order Amount</th>
+                                    <th scope="col">Due</th>    
+                                    <th scope="col">Tentative Delivery</th>
+                                    <th scope="col">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in progressing_orders %}
+                                  <tr>
+
+                                    <td>{{order.service.title}}</td>
+                                    <td>{{order.service_option.title}}{% if order.service_option.apndix != 0 %}{{order.service_option.apndix}}{% endif %}</td>
+                                    <td>{{order.last_status}}</td>    
+                                    <td>{{order.order_amount}}</td>
+                                    <td>{{order.order_amount|due:order.paid_amount}}</td>
+                                    <td>{{order.tentative_delivery_date}}</td>
+                                    <td>
+                                      {% if order.id not in picked_order_ids %}
+                                      <a class="btn btn-primary" href="{% url 'accounts:pick_order' order.id user.id %}">Pick Order</a>
+                                      {% else %}
+                                        Picked
+                                      {% endif %}
+                                    </td>
+                                  </tr>
+                                  {% endfor %}
+                                  
+                                </tbody>
+                              </table>
+                        </div>
+
+
+
+                        <div class="tab-pane fade show" id="pills-picked_orders" role="tabpanel" aria-labelledby="pills-picked_orders-tab">
+                          <table class="table table-striped table-hover table-responsive">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Service</th>
+                                  <th scope="col">Service Option</th>
+                                  <th scope="col">Order Status</th>
+                                  <th scope="col">Order Amount</th>
+                                  <th scope="col">Due</th>    
+                                  <th scope="col">Tentative Delivery</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                  {% for order in picked_orders %}
+                                <tr>
+
+                                  <td>{{order.service.title}}</td>
+                                  <td>{{order.service_option.title}}{% if order.service_option.apndix != 0 %}{{order.service_option.apndix}}{% endif %}</td>
+                                  <td>{{order.last_status}}</td>    
+                                  <td>{{order.order_amount}}</td>
+                                  <td>{{order.order_amount|due:order.paid_amount}}</td>
+                                  <td>{{order.tentative_delivery_date}}</td>
+                                  <td>
+                                    {% if order.id not in picked_order_ids %}
+                                    <a class="btn btn-primary" href="{% url 'accounts:pick_order' order.id user.id %}">Pick Order</a>
+                                    {% else %}
+                                    <a class="btn btn-primary" href="{% url 'accounts:submit_picked' order.id user.id %}">Submit</a>
+
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                                {% endfor %}
+                                
+                              </tbody>
+                            </table>
+                      </div>
+
+
+
+                      <div class="tab-pane fade show " id="pills-waiting_to_pick" role="tabpanel" aria-labelledby="pills-waiting_to_pick-tab">
+                        <table class="table table-striped table-hover table-responsive">
+                            <thead>
+                              <tr>
+                                <th scope="col">Service</th>
+                                <th scope="col">Service Option</th>
+                                <th scope="col">Order Status</th>
+                                <th scope="col">Order Amount</th>
+                                <th scope="col">Due</th>    
+                                <th scope="col">Tentative Delivery</th>
+                                <th scope="col">Total Applied</th>
+
+                                
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in waiting_to_pick %}
+                              <tr>
+
+                                <td>{{order.service.title}}</td>
+                                <td>{{order.service_option.title}}{% if order.service_option.apndix != 0 %}{{order.service_option.apndix}}{% endif %}</td>
+                                <td>{{order.last_status}}</td>    
+                                <td>{{order.order_amount}}</td>
+                                <td>{{order.order_amount|due:order.paid_amount}}</td>
+                                <td>{{order.tentative_delivery_date}}</td>
+                                <td>{{order.in_picked}}</td>
+
+                                
+                              </tr>
+                              {% endfor %}
+                              
+                            </tbody>
+                          </table>
+                    </div>
+                      </div>
+                      
+                   
+                    
+
+
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% block title %}{{site.slogan}}{% endblock %} 
+
+{% block content %}
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" >
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">Register</h1>
+
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-primary d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div data-aos="fade-up" data-aos-delay="100" class="card bg-secondary p-5">
+                    <form action="" method="POST"  novalidate="" autocomplete="off" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="container px-0">
+
+                     
+            
+                        <div class="form-floating mb-3">
+                            {{ form.email }}
+                            <label class="text-primary" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                            <span class="text-start text-danger">{{ form.email.errors }}</span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            {{ form.mobile }}
+                            <label class="text-primary" for="{{ form.mobile.id_for_label }}">{{ form.mobile.label }}</label>
+                            <span class="text-start text-danger">{{ form.mobile.errors }}</span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            {{ form.password1 }}
+                            <label class="text-primary" for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                            <span class="text-start text-danger">{{ form.password1.errors }}</span>
+                        </div>
+            
+                        <div class="form-floating mb-3">
+                            {{ form.password2 }}
+                            <label class="text-primary" for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                            <span class="text-start text-danger">{{ form.password2.errors }}</span>
+                        </div>
+                       
+                        <div class="form-floating mb-3">                
+                            {{ form.captcha }}                
+                            <span class="text-start text-danger">{{ form.captcha.errors }}</span>
+                        </div>
+            
+            
+            
+                        <button type="submit" class="btn btn-primary ms-auto"> Register	</button>
+                        
+                                  
+                        <hr class="my-4 text-primary">
+                        <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+                        <div class="text-muted"> Already have an account?   <a href="{% url 'login' %}" class="text-dark">Login</a> </div>
+                   
+                    </div>
+
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+

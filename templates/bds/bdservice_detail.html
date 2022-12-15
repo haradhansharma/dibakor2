@@ -1,0 +1,172 @@
+{% extends "bds/layouts/base.html" %}
+{% load custom_tags %}
+{% load static %}
+{% block content %}
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">{{object.title}}</h1>
+
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-primary placeholder-wave-non-ani d-flex align-items-center">
+    <div class="container px-0 ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <div data-aos="fade-up" data-aos-delay="100" class="card overflow-hidden bg-secondary">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <div class="container px-0 bg-secondary">
+                    <div class="row border-bottom border-1 border-danger">
+                        
+                        <div class="col-md-6 d-flex">
+                            <div class="images flex-fill">
+                                <div class="text-center"> 
+                                    <img id="main-image" src="{{ object.primary_image }}" width="100%"/>
+                                </div>
+                                <div class="thumbnail text-center mt-2"> 
+                                    {% for img in object.images %}
+                                    <img onclick="change_image(this)"  src="{{ img.image.url }}" width="70"> 
+                                    {% endfor %}
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="col-md-6 d-flex">
+                            <div class="p-4 flex-fill align-self-end">
+                                <div class="d-flex">
+                                    <div class="d-flex" onclick="history.back()"> 
+                                        <i class="bi bi-arrow-left-short"></i> 
+                                        <span class="back ml-1 text-primary">Back</span> 
+                                    </div>
+                                </div>
+                                <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand text-primary">Dibakor</span>
+                                    <h5 class="text-uppercase text-primary">{{object.title}}</h5>
+                                    <div class="price d-flex flex-row align-items-center"> 
+                                        <span id="optionprice" class="act-price"></span>
+                                        
+                                    </div>
+                                </div>
+                                <p class="about text-primary">{{object.description}}</p>
+                                <div class="sizes mt-5">
+                                    <h6 class="text-uppercase text-primary">Avialable Options</h6> 
+                                    
+                                    {% for option in object.serviceoptions_set.all %}
+                                    {% if option.is_active %}                                    
+                                            <label id="opt{{option.id}}" class="radio mb-1">
+                                            <input type="radio" name="option_id" id="{{option.id}}" value="{{option.id}}" {% if forloop.counter == 1 %} checked {% endif %} required>
+                                            <span class="small">{{option.title}}{% if option.apndix != 0 %}{{option.apndix }}{% endif %}</span>
+                                            </label>                                  
+                                    
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                    
+                    </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="col-md-10 align-items-center justify-content-center mx-auto p-3">
+                                <div class="row">
+                            {% if object.requiredoption_set.all %}                            
+                                {% for option in object.requiredoption_set.all %}
+                                <div data-aos="fade-up" data-aos-delay="{{ forloop.counter | multiply:100 }}" class="col-lg-6 col-xl-4 mb-3 d-flex">                                    
+                                    <div class="card border-0 bg-light mb-2 mb-xl-0 flex-fill p-2 align-items-center justify-content-center">                               
+                                    <p class="text-primary text-uppercase">{{option.title}}   </p> 
+                                    <!--DO NOT CHANGE name DATA FORMATE BELOW! IT WILL IMPACT IN THE VIEW FALSE RESULT-->
+                                    {% if option.type == 'text' %}
+                                    <input type="text" name="{{object.id}}-{{option.title}}-{{option.id}}" class="form-control" id="{{option.id}}"
+                                        maxlength="{{option.maxlength}}" {% if option.required %} required {% endif %}>
+                                    {% elif option.type == 'textarea' %}
+                                    <textarea name="{{object.id}}-{{option.title}}-{{option.id}}" class="form-control" id="{{option.id}}" rows="5"
+                                        maxlength="{{option.maxlength}}" {% if option.required %} required {% endif %}></textarea>
+                                    {% elif option.type == 'file' %}
+                                    <input type="file" name="{{object.id}}-{{option.title}}-{{option.id}}" class="form-control" id="{{option.id}}"
+                                        accept="image/png, image/jpeg" enctype="multipart/form-data" {% if option.required %} required {% endif %}>
+                                    {% endif %}                               
+                                </div>
+                            </div>
+                                {% endfor %}   
+
+                                {% if not user.is_authenticated %} 
+                                {{inline_form.as_p}}
+                                {% endif %}
+                                <div class="cart mt-4 d-flex align-items-center justify-content-center "> 
+                                    <button type="submit" class="btn btn-danger text-uppercase mx-auto px-4">Place Order</button>                                     
+                                </div>                            
+                            {% endif %}
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function change_image(image) {
+        var container = document.getElementById("main-image");
+        container.src = image.src;
+    }
+
+
+       
+        
+
+</script>
+<script>
+        
+        
+        let optns;
+        optns = {{ options }};
+        optns.forEach((item, index)=>{     
+                
+            $( document ).ready(function() {
+                if(item[0] == $('input[name="option_id"]:checked').val()){
+                    $("#optionprice").text(item[1]);
+                } 
+            });  
+            $("#opt" + item[0]).click(function(){
+                $("#optionprice").text(item[1]);
+            });
+        })
+        
+
+       
+</script>
+
+{% endblock content %}

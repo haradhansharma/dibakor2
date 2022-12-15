@@ -1,0 +1,203 @@
+{% extends "bds/layouts/base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+
+
+<section class="bg-primary progress-bar-striped-custom placeholder-wave-non-ani d-flex align-items-center" style="min-height: 10vh;">
+    <div class="container px-0 mt-5">
+        <div class="row d-flex justify-content-center align-items-cnenter text-center">
+            <div class="col-12">
+               
+
+                    <h1 data-aos="fade-up" data-aos-delay="100" class="text-uppercase text-secondary">Confirm Order #{{order.id}}</h1>
+
+
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-primary d-flex align-items-center" >
+    <div class="container px-0">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12">
+                <div data-aos="fade-up" data-aos-delay="100" class="card bg-secondary">
+
+                 
+
+                    <form class="p-5" action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+
+
+                            <div data-aos="fade-up" data-aos-delay="100" class="col-md-6">
+                                <h4 class="border-bottom border-1 border-danger">Your Information</h4>
+                                <div class="card border-0 bg-light p-5 pt-2">
+                                    <p class="text-uppercase">{{ order.user.get_full_name }}</p>
+                                    <p>{{ order.user.email }}</p>
+                                    <p>{{ order.user.mobile }}</p>
+                                    {% if not user.is_authenticated %}
+                                    {{otp_form.as_p}}
+                                    {% endif %}
+                                </div>
+
+                                <h4 class="border-bottom border-1 border-danger">Shipping Address</h4>
+                                <div class="card border-0 bg-light p-5 pt-2 pb-4">
+                                    <div class="form-floating">
+                                        {{ form.shipping_address }}
+                                        <label class="mb-2 text-muted" for="{{ form.shipping_address.id_for_label }}">{{ form.shipping_address.label }}</label>
+                                    </div>
+                                    <span class="text-error invalid-feedback">{{ form.shipping_address.errors }}</span>
+                                </div>
+                                
+
+                                <h4 class="border-bottom border-1 border-danger">Billing Address</h4>
+                                <div class="card border-0 bg-light p-5 pt-2 pb-4">
+                                    <div class="form-floating">
+                                        {{ form.payment_address }}
+                                        <label class="mb-2 text-muted" for="{{ form.payment_address.id_for_label }}">{{ form.payment_address.label }}</label>
+                                    </div>
+                                    <span class="text-error invalid-feedback">{{ form.payment_address.errors }}</span>
+                                </div>                               
+                            </div>
+    
+                            
+    
+                            <div data-aos="fade-up" data-aos-delay="200" class="col-md-6">
+                                <h4 class="border-bottom border-1 border-danger">Order Sumamry</h4>
+                                <div class="card border-0 bg-light p-5 pt-0">
+                                    <div><strong>Odrer Number:</strong><span> #{{order.id}}</span></div>
+                                    <div><strong>Service Executable:</strong><span> {{order.service.title}}</span></div>
+                                    <div><strong>Option Choosen:</strong><span> {{order.service_option.title}}{% if order.service_option.apndix != 0 %}{{order.service_option.apndix }}{% endif %}</span></div>
+                                    <div><strong>Option Price:</strong><span> {{order.order_amount}}</span></div>
+                                    <div><strong>Paid Amount:</strong><span> {{order.paid_amount}}</span></div>
+                                    <div><strong>Order Status:</strong><span> {{order.last_status}}</span></div>
+                                    <div><strong>Tentative Delivery Date:</strong><span> {{order.tentative_delivery_date}}</span></div>
+                                    
+                                    {% if order.service_option.partial_allowed %}
+                                    <div><strong>Partial payment allowed :</strong><span> {{order.service_option.partial_allowed}}</span></div>
+                                    <div><strong>Initial paid shold be greater then :</strong><span> {{should_paid}}</span></div>
+                                    <div><strong>Full Payment By:</strong><span> {{order.full_payment_date}}</span></div>
+                                    {% endif %}
+
+
+                                </div>
+
+                                <h4 class="border-bottom border-1 border-danger">Payment Methods</h4>
+                                <div class="card border-0 bg-light p-5 pt-0">
+                                    <h5 class="text-muted">Payment Instructions</h5>
+                                    <span id="instruction" class="">
+                                        <div id="feedbackspinner">        
+                                            <div hx-get="{% url 'bds:payment_instruction' %}" hx-include="[name='pm']" hx-trigger="load"></div>                                   
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="card border-0 bg-light p-5 pt-0">    
+                                    <label >Methods</label>
+                                    <select class="form-select" aria-label="Payment Methods" name="pm" hx-get="{% url 'bds:payment_instruction' %}" hx-include="[name='pm']" hx-target="#feedbackspinner" >
+                                        {% for method in payment_methods%}
+                                        <option value="{{method.id}}">{{method.title}}</option>                                    
+                                        {% endfor %}
+                                    </select>                                    
+                                </div> 
+                            </div>                            
+                        </div>   
+                        <div class="row mt-5" data-aos="fade-up" data-aos-delay="300">
+                            <div class="col-md-6">
+                                <h4 class="border-bottom border-1 border-danger">Instructions will be considered</h4>
+
+                                <div class="row">                  
+
+                                {% for item in order.orderitems.all %}
+                                <div data-aos="fade-up" data-aos-delay="{{ forloop.counter | multiply:100 }}" class="col-md-6  mb-3 d-flex">                                    
+                                    <div class="card border-0 bg-light mb-2 mb-xl-0 flex-fill p-2 align-items-center justify-content-center">
+                                    {{item.required_option.type}}
+                                    
+                                    <!--DO NOT CHANGE name DATA FORMATE BELOW! IT WILL IMPACT IN THE VIEW FALSE RESULT-->
+                                    {% if item.required_option.type == 'text' %}
+                                    {{item.require_title}}
+                                    <input type="text" name="require-{{item.id}}" class="form-control" id="{{item.id}}"
+                                        maxlength="{{item.required_option.maxlength}}" value="{{item.title_value}}" aria-label="{{item.require_title}}" {% if item.required_option.required %} required {% endif %}>
+                                    {% elif item.required_option.type  == 'textarea' %}
+                                    {{item.require_title}}
+                                    <textarea name="require-{{item.id}}" class="form-control" id="{{item.id}}" rows="5"
+                                        maxlength="{{item.required_option.maxlength}}" aria-label="{{item.require_title}}" {% if item.required_option.required %} required {% endif %}>{{item.title_value}}</textarea>
+                                    {% else %}
+                                    
+                                    
+                                    {% endif %} 
+                                </div>
+                                </div>
+                                {% endfor %}
+                                <div class="row" hx-target="this" hx-swap="innerHTML">
+                                {% for item in order.orderitemsfile.all %}
+                                <div data-aos="fade-up" data-aos-delay="{{ forloop.counter | multiply:100 }}" class="col-md-6  mb-3 d-flex">                                    
+                                    <div class="card border-0 bg-light mb-2 mb-xl-0 flex-fill p-2 align-items-center justify-content-center">
+                                    {{item.require_title}}
+                                    
+                                    
+                                    
+                                    {% if item.required_option.type == 'file' %}
+                                    {% if item.title_value != '' %}
+                                    <img src="{{ item.title_value.url }}" alt="" width="200px">                                    
+                                    {% if item.order.paid_amount <= 0 %}
+                                    <div hx-get="{% url 'bds:delete_extra_file' item.id item.order.id %}"><i class="bi bi-x-square"></i></div>
+                                    {% endif %}
+                                    {% else %}
+                                    <input type="file" name="require-{{item.id}}" class="form-control" id="{{item.id}}"
+                                        accept="image/png, image/jpeg" enctype="multipart/form-data" {% if item.required_option.required %} required {% endif %}>
+                                    {% endif %} 
+                                    {% endif %} 
+                                </div>
+                                </div>                                
+                                {% endfor %}
+                                </div>
+                            </div>
+
+
+
+
+
+                            </div>
+                            <div class="col-md-6">
+                                {% if order.paid_amount > 0 %}
+                                <div class="card border-0 bg-light p-5 pt-0 align-items-center justify-content-center">
+                                    
+                                    <div class="card-body">
+                                        <div class="alert alert-primary" role="alert">Order already confirmed!</div> 
+                                    </div>
+                                
+                                </div>
+                                {% else %}
+                                <h4 class="border-bottom border-1 border-danger">Confirm the order</h4>
+                                <div class="card border-0 bg-light p-5 pt-0">
+                                    <input type="hidden" name="order_id" value="{{order.id}}">
+                                    
+
+                                {{confirm_dataForm.as_p}}
+                                <div id="amount_error"></div>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+{% endblock content %}  
